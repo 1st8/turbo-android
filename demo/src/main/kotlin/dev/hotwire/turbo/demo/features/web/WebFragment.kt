@@ -25,6 +25,13 @@ open class WebFragment : TurboWebFragment(), NavDestination {
         menuProgress?.isVisible = false
     }
 
+    override fun onVisitCompleted(location: String, completedOffline: Boolean) {
+        super.onVisitCompleted(location, completedOffline)
+
+        val script = "window.Bridge && (Bridge.state = { proofOfConcept: true })"
+        session.webView.evaluateJavascript(script, null)
+    }
+
     override fun onVisitErrorReceived(location: String, errorCode: Int) {
         when (errorCode) {
             401 -> navigate(SIGN_IN_URL, TurboVisitOptions(action = REPLACE))
